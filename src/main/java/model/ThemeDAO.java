@@ -1,19 +1,29 @@
 package model;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Егор on 01.04.2017.
  */
-public class UserDAO {
+public class ThemeDAO {
+
+    public static void main(String[] args) throws Exception {
+        ThemeDAO themeDAO = new ThemeDAO("jdbc:mysql://localhost:3306/myblog", "root", "root");
+        String strDate = "2011-12-31 00:00:00";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        java.util.Date date = sdf.parse(strDate);
+        themeDAO.insertTheme(new Theme("test", "test", new Date(date.getTime())));
+    }
+
     private String jdbcURL;
     private String jdbcUsername;
     private String jdbcPassword;
     private Connection jdbcConnection;
 
-    public UserDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) {
+    public ThemeDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) {
         this.jdbcURL = jdbcURL;
         this.jdbcUsername = jdbcUsername;
         this.jdbcPassword = jdbcPassword;
@@ -37,13 +47,14 @@ public class UserDAO {
         }
     }
 
-    public boolean insertUser(User user) throws SQLException {
-        String sql = "INSERT INTO user (login, password) VALUES (?, ?)";
+    public boolean insertTheme(Theme theme) throws SQLException {
+        String sql = "INSERT INTO theme (title, text, date) VALUES (?, ?, ?)";
         connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setString(1, user.getLogin());
-        statement.setString(2, user.getPassword());
+        statement.setString(1, theme.getTitle());
+        statement.setString(2, theme.getText());
+        statement.setDate(3, theme.getDate());
 
         boolean rowInserted = statement.executeUpdate() > 0;
         statement.close();
@@ -51,10 +62,10 @@ public class UserDAO {
         return rowInserted;
     }
 
-    public List<User> listAllUsers() throws SQLException {
-        List<User> listUsers = new ArrayList<User>();
+    public List<Theme> listAllThemes() throws SQLException {
+        List<Theme> listThemes = new ArrayList<Theme>();
 
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM theme";
 
         connect();
 
@@ -63,11 +74,12 @@ public class UserDAO {
 
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
-            String login = resultSet.getString("login");
-            String password = resultSet.getString("password");
+            String title = resultSet.getString("title");
+            String text = resultSet.getString("text");
+            Date date = resultSet.getDate("date");
 
-            User user = new User(id, login, password);
-            listUsers.add(user);
+            Theme theme = new Theme(id, title, text, date);
+            listThemes.add(theme);
         }
 
         resultSet.close();
@@ -75,16 +87,16 @@ public class UserDAO {
 
         disconnect();
 
-        return listUsers;
+        return listThemes;
     }
 
-    public boolean deleteUser(User user) throws SQLException {
-        String sql = "DELETE FROM user where id = ?";
+    public boolean deleteTheme(Theme theme) throws SQLException {
+        String sql = "DELETE FROM theme where id = ?";
 
         connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, user.getId());
+        statement.setInt(1, theme.getId());
 
         boolean rowDeleted = statement.executeUpdate() > 0;
         statement.close();
@@ -92,15 +104,16 @@ public class UserDAO {
         return rowDeleted;
     }
 
-    public boolean updateUser(User user) throws SQLException {
-        String sql = "UPDATE user SET login = ?, password = ?";
+    public boolean updateTheme(Theme theme) throws SQLException {
+        String sql = "UPDATE theme SET title = ?, text = ?, date = ?";
         sql += " WHERE id = ?";
         connect();
 
         PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setString(1, user.getLogin());
-        statement.setString(2, user.getPassword());
-        statement.setInt(3, user.getId());
+        statement.setString(1, theme.getTitle());
+        statement.setString(2, theme.getText());
+        statement.setDate(2, theme.getDate());
+        statement.setInt(4, theme.getId());
 
         boolean rowUpdated = statement.executeUpdate() > 0;
         statement.close();
@@ -108,9 +121,9 @@ public class UserDAO {
         return rowUpdated;
     }
 
-    public User getUser(int id) throws SQLException {
-        User user = null;
-        String sql = "SELECT * FROM user WHERE id = ?";
+    public Theme getTheme(int id) throws SQLException {
+        Theme theme = null;
+        String sql = "SELECT * FROM theme WHERE id = ?";
 
         connect();
 
@@ -120,15 +133,16 @@ public class UserDAO {
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
-            String login = resultSet.getString("login");
-            String password = resultSet.getString("password");
+            String title = resultSet.getString("title");
+            String text = resultSet.getString("text");
+            Date date = resultSet.getDate("date");
 
-            user = new User(id, login, password);
+            theme = new Theme(id, title, text, date);
         }
 
         resultSet.close();
         statement.close();
 
-        return user;
+        return theme;
     }
 }
