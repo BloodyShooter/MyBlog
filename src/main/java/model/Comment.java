@@ -7,28 +7,28 @@ import java.sql.Date;
  */
 public class Comment {
     private int id;
-    private String test;
+    private String text;
     private Date date;
-    private User iduser;
-    private Theme idtheme;
+    private int id_user;
+    private int id_theme;
 
     public Comment(int id) {
         this.id = id;
     }
 
-    public Comment(int id, String test, Date date, User iduser, Theme idtheme) {
+    public Comment(int id, String text, Date date, int id_user, int id_theme) {
         this.id = id;
-        this.test = test;
+        this.text = text;
         this.date = date;
-        this.iduser = iduser;
-        this.idtheme = idtheme;
+        this.id_user = id_user;
+        this.id_theme = id_theme;
     }
 
-    public Comment(String test, Date date, User iduser, Theme idtheme) {
-        this.test = test;
+    public Comment(String text, Date date, int id_user, int id_theme) {
+        this.text = text;
         this.date = date;
-        this.iduser = iduser;
-        this.idtheme = idtheme;
+        this.id_user = id_user;
+        this.id_theme = id_theme;
     }
 
     public int getId() {
@@ -39,12 +39,12 @@ public class Comment {
         this.id = id;
     }
 
-    public String getTest() {
-        return test;
+    public String getText() {
+        return text;
     }
 
-    public void setTest(String test) {
-        this.test = test;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Date getDate() {
@@ -55,19 +55,19 @@ public class Comment {
         this.date = date;
     }
 
-    public User getIduser() {
-        return iduser;
+    public int getIdUser() {
+        return id_user;
     }
 
-    public void setIduser(User iduser) {
-        this.iduser = iduser;
+    public void setIdUser(int id_user) {
+        this.id_user = id_user;
     }
 
-    public Theme getIdtheme() {
-        return idtheme;
+    public int getIdTheme() {
+        return id_theme;
     }
 
-    public void setIdtheme(Theme idtheme) {
-        this.idtheme = idtheme;
+    public void setIdTheme(int id_theme) {
+        this.id_theme = id_theme;
     }
 }

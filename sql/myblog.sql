@@ -13,9 +13,9 @@ CREATE TABLE `myblog`.`user` (
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
 
-CREATE TABLE `myblog`.`comments` (
+CREATE TABLE `myblog`.`comment` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `test` VARCHAR(255) NOT NULL,
+  `text` VARCHAR(255) NOT NULL,
   `date` DATETIME NOT NULL,
   `iduser` INT NOT NULL,
   `idtheme` INT NOT NULL,
